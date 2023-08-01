@@ -88,3 +88,26 @@ def test_get_chapter_info_not_exists():
     response = client.get("/courses/6431137ab5da949e5978a281/990")
     assert response.status_code == 404
     assert response.json() == {'detail': 'Chapter not found'}
+
+def test_rate_chapter():
+    course_id = "6431137ab5da949e5978a281"
+    chapter_id = "1"
+    rating = 1
+
+    response = client.post(f"/courses/{course_id}/{chapter_id}?rating={rating}")
+
+    assert response.status_code == 200
+
+    # Check if the response body has the expected structure
+    assert "name" in response.json()
+    assert "rating" in response.json()
+    assert "total" in response.json()["rating"]
+    assert "count" in response.json()["rating"]
+
+    assert response.json()["rating"]["total"] > 0
+    assert response.json()["rating"]["count"] > 0
+     
+def test_rate_chapter_not_exists():
+    response = client.post("/courses/6431137ab5da949e5978a281/990/rate", json={"rating": 1})
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'Not Found'}
