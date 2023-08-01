@@ -57,3 +57,21 @@ def test_get_courses_filter_by_domain_and_sort_by_date():
     assert all([c['domain'][0] == 'mathematics' for c in courses])
     assert sorted(courses, key=lambda x: x['date'], reverse=True) == courses
     
+def test_get_course_by_id_exists():
+    response = client.get("/courses/6431137ab5da949e5978a281")
+    assert response.status_code == 200
+    course = response.json()
+    # get the course from the database
+    course_db = db.courses.find_one({'_id': ObjectId('6431137ab5da949e5978a281')})
+    # get the name of the course from the database
+    name_db = course_db['name']
+    # get the name of the course from the response
+    name_response = course['name']
+    # compare the two
+    assert name_db == name_response
+     
+     
+def test_get_course_by_id_not_exists():
+    response = client.get("/courses/6431137ab5da949e5978a280")
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'Course not found'}
