@@ -1,7 +1,6 @@
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from bson import ObjectId
-import pytest
 from main import app
 
 client = TestClient(app)
