@@ -5,7 +5,7 @@ import pytest
 from main import app
 
 client = TestClient(app)
-mongo_client  = MongoClient('mongodb://localhost:27017/')
+mongo_client = MongoClient('mongodb://localhost:27017/')
 db = mongo_client['courses']
 
 def test_get_courses_no_params():
